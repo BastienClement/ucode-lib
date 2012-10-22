@@ -102,6 +102,8 @@ abstract class Lib {
 		// Components
 		$parser->DefineTag('spoiler',    new SpoilerTag());
 		$parser->DefineTag('toggler',    new TogglerTag());
+		$parser->DefineTag('tabs',       new TabsTag());
+		$parser->DefineTag('tab',        new TabTag());
 		
 		// Root
 		$parser->RootTag(new \UCode\URoot());

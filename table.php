@@ -47,6 +47,7 @@ class TableRowTag extends \XBBC\SimpleTag {
 class TableDataTag extends \XBBC\SimpleTag {
 	protected static $text_tag;
 	protected $max_nesting = 0;
+	protected $table_header;
 	
 	public function __construct($header = false) {
 		if($header)
@@ -54,6 +55,7 @@ class TableDataTag extends \XBBC\SimpleTag {
 		else
 			parent::__construct(null, "</td>", true);
 		
+		$this->table_header = $header;
 		$this->display = \XBBC\DISPLAY_SPECIAL;
 		$this->strip_empty = false;
 	}
@@ -103,7 +105,7 @@ class TableDataTag extends \XBBC\SimpleTag {
 			$attrs[] = 'colspan="'.((int) $this->xargs['colspan']).'"';
 		
 		$attrs = empty($attrs) ? '' : ' '.implode(' ', $attrs);
-		return (($header) ? '<th' : '<td').$attrs.'>';
+		return (($this->table_header) ? '<th' : '<td').$attrs.'>';
 	}
 }
 

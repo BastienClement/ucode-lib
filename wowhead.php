@@ -87,6 +87,14 @@ abstract class WowheadTag extends \XBBC\LeafTag {
 		return false;
 	}
 	
+	public static function GetIconURL($icon) {
+		if(preg_match('/^[a-z0-9_]+$/i', $icon)) {
+			return "http://wow.zamimg.com/images/wow/icons/small/$icon.jpg";
+		} else {
+			return false;
+		}
+	}
+	
 	//
 	// Tag stuff
 	//
@@ -152,9 +160,8 @@ abstract class WowheadTag extends \XBBC\LeafTag {
 		
 		$this->before = "<a href=\"http://{$this->domain}.wowhead.com/$path$args\"$styles$classes>";
 		
-		if(isset($this->xargs['icon'])) {
-			$icon = preg_replace('/[^a-z0-9_]/i', '', $this->xargs['icon']);
-			$this->before .= "<img src=\"http://wow.zamimg.com/images/wow/icons/small/$icon.jpg\" alt=\"$icon\" class=\"db-icon\" /> ";
+		if(isset($this->xargs['icon']) && $icon_url = self::GetIconURL($this->xargs['icon'])) {
+			$this->before .= "<img src=\"$icon_url\" alt=\"{$this->xargs['icon']}\" class=\"db-icon\" /> ";
 		}
 	}
 	
@@ -438,7 +445,10 @@ class IconTag extends \XBBC\SingleTag {
 	}
 	
 	protected function __create() {
-		$this->html = '<img src="http://wow.zamimg.com/images/wow/icons/small/'.$this->arg.'.jpg" class="wow-icon" alt="'.$this->arg.'" /">';
+		if(!($icon_url = WowheadTag::GetIconURL($this->arg)))
+			return false;
+		
+		$this->html = '<img src="'.$icon_url.'" class="wow-icon" alt="'.$this->arg.'" /">';
 	}
 }
 
