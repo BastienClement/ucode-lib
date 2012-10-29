@@ -26,7 +26,13 @@ class TogglerTag extends \XBBC\RootTag {
 	
 	protected function __create() {
 		$text = $this->arg ? htmlspecialchars($this->arg) : 'Ouvrir / fermer';
-		$controller = '<a href="#" onclick="ucode.toggler(this); return false;" class="toggler-link">'.$text.'</a>';
+		if(isset($this->xargs['icon']) && ($icon_url = WowheadTag::GetIconURL($this->xargs['icon']))) {
+			$icon = '<img src="'.$icon_url.'" class="wow-icon" alt="'.$this->arg.'" /"> ';
+		} else {
+			$icon = '';
+		}
+		
+		$controller = '<a href="#" onclick="ucode.toggler(this); return false;" class="toggler-link">'.$icon.$text.'</a>';
 		
 		$classes = isset($this->xargs['open']) ? 'toggler toggled' : 'toggler';
 		$this->before = '<div class="'.$classes.'">'.$controller.'<div class="toggler-inner">';
