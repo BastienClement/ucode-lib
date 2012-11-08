@@ -88,7 +88,7 @@ abstract class WowheadTag extends \XBBC\LeafTag {
 	}
 	
 	public static function GetIconURL($icon) {
-		if(preg_match('/^[a-z0-9_]+$/i', $icon)) {
+		if(preg_match('/^[a-z0-9_\-]+$/i', $icon)) {
 			return "http://wow.zamimg.com/images/wow/icons/small/$icon.jpg";
 		} else {
 			return false;
