@@ -9,7 +9,13 @@ class TableTag extends \XBBC\SimpleTag {
 	protected $max_nesting = 5;
 	
 	public function __construct() {
-		parent::__construct('<table cellspacing="0" cellpadding="0">', '</table>', true);
+		parent::__construct('<table>', '</table>', true);
+	}
+	
+	public function __create() {
+		if(isset($this->xargs['compact'])) {
+			$this->before = '<table class="compact">';
+		}
 	}
 	
 	public function AllowText() {
