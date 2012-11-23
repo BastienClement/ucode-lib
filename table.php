@@ -83,4 +83,8 @@ class TableDataTag extends \XBBC\RootTag {
 		$attrs = empty($attrs) ? '' : ' '.implode(' ', $attrs);
 		return (($this->table_header) ? '<th' : '<td').$attrs.'>';
 	}
+	
+	public function ReducePlaintext() {
+		return "\n".parent::ReducePlaintext()."\n";
+	}
 }
