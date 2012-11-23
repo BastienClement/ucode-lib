@@ -164,6 +164,10 @@ abstract class WowheadTag extends \XBBC\LeafTag {
 			$this->before .= "<img src=\"$icon_url\" alt=\"{$this->xargs['icon']}\" class=\"db-icon\" /> ";
 		}
 	}
+
+	public function ReducePlaintext() {
+		return '['.parent::ReducePlaintext().']';
+	}
 	
 	protected function import_arg($key, $as = null) {
 		if(!$as) {
@@ -369,27 +373,32 @@ class ObjectTag extends WowheadTag {
 class QuestTag extends WowheadTag {
 	protected function __create() {
 		parent::__create();
-		
-		if(isset($this->xargs['bare']))
-			return;
-		
-		if(isset($this->xargs['daily'])) {
-			if(isset($this->xargs['done'])) {
-				$this->content = '<img src="http://wow.zamimg.com/images/wow/icons/tiny/quest_end_daily.gif" class="icon-quest" alt="" /> ';
-			} else {
-				$this->content = '<img src="http://wow.zamimg.com/images/wow/icons/tiny/quest_start_daily.gif" class="icon-quest" alt="" /> ';
-			}
-		} else {
-			if(isset($this->xargs['done'])) {
-				$this->content = '<img src="http://wow.zamimg.com/images/wow/icons/tiny/quest_end.gif" class="icon-quest" alt="" /> ';
-			} else {
-				$this->content = '<img src="http://wow.zamimg.com/images/wow/icons/tiny/quest_start.gif" class="icon-quest" alt="" /> ';
-			}
-		}
 	}
 	
 	protected function Handle() {
 		return "quest={$this->arg}";
+	}
+	
+	public function Reduce() {
+		$prefix = '';
+		
+		if(!isset($this->xargs['bare'])) {
+			if(isset($this->xargs['daily'])) {
+				if(isset($this->xargs['done'])) {
+					$prefix = '<img src="http://wow.zamimg.com/images/wow/icons/tiny/quest_end_daily.gif" class="icon-quest" alt="" /> ';
+				} else {
+					$prefix = '<img src="http://wow.zamimg.com/images/wow/icons/tiny/quest_start_daily.gif" class="icon-quest" alt="" /> ';
+				}
+			} else {
+				if(isset($this->xargs['done'])) {
+					$prefix = '<img src="http://wow.zamimg.com/images/wow/icons/tiny/quest_end.gif" class="icon-quest" alt="" /> ';
+				} else {
+					$prefix = '<img src="http://wow.zamimg.com/images/wow/icons/tiny/quest_start.gif" class="icon-quest" alt="" /> ';
+				}
+			}
+		}
+		
+		return $prefix.parent::Reduce();
 	}
 }
 
@@ -431,6 +440,11 @@ class SocketTag extends \XBBC\SingleTag {
 		} else {
 			return false;
 		}
+	}
+	
+	public function ReducePlaintext() {
+		$sock = explode('-', self::$socket_classes[strtolower($this->arg)], 2);
+		return "{{$sock[1]} {$sock[0]}}";
 	}
 }
 
@@ -486,6 +500,15 @@ class ClassTag extends \XBBC\SingleTag {
 			return false;
 		}
 	}
+	
+	public function ReducePlaintext() {
+		$arg = strtolower($this->arg);
+		
+		if(isset(self::$class_data[$arg])) {
+			list($css_class, $img, $text_male, $text_female) = self::$class_data[$arg];
+			return isset($this->xargs['female']) ? $text_female : $text_male;
+		}
+	}
 }
 
 //
@@ -535,5 +558,13 @@ class RaceTag extends \XBBC\SingleTag {
 		}
 		
 		$this->html = "<span class=\"wow-race\"><img src=\"http://wow.zamimg.com/images/wow/icons/small/race_{$img}_$gender.jpg\" /> $text</span>";
+	}
+	
+	public function ReducePlaintext() {
+		if(isset(self::$race_data[strtolower($this->arg)])) {
+			$race_data = self::$race_data[strtolower($this->arg)];
+			list($img, $text_male, $text_female) = $race_data;
+			return (isset($this->xargs['female'])) ? $text_female : $text_male;
+		}
 	}
 }

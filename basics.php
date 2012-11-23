@@ -31,20 +31,33 @@ class LinkTag extends \XBBC\SimpleTag {
 		return $this->arg ? parent::CanShift($tag) : false;
 	}
 	
-	public function Reduce() {
+	public function GetURL() {
 		if($this->embedded_img)
-			$url = htmlspecialchars($this->embedded_img->GetURL());
+			return htmlspecialchars($this->embedded_img->GetURL());
 		else
-			$url = $this->arg
+			return $this->arg
 				? htmlspecialchars($this->arg)
 				: ($this->content[0] == '#'
 					? htmlspecialchars($this->Content())
 					: \XBBC\TagTools::SanitizeURL($this->Content(), true));
-		
-		if($url)
+	}
+	
+	public function Reduce() {
+		if($url = $this->GetURL())
 			$this->before = '<a href="'.$url.'">';
 		
 		return parent::Reduce();
+	}
+	
+	public function ReducePlaintext() {
+		$url = $this->GetURL();
+		$title = parent::ReducePlaintext();
+		
+		if($url && $url != $title) {
+			return "[$url ($title)]";
+		} else {
+			return "[$title]";
+		}
 	}
 }
 
@@ -90,6 +103,10 @@ class ImageTag extends ArgAsContentTag {
 	public function GetURL() {
 		return \XBBC\TagTools::SanitizeURL(parent::Reduce());
 	}
+	
+	public function ReducePlaintext() {
+		return '{'.$this->GetURL().'}';
+	}
 }
 
 //
@@ -97,7 +114,7 @@ class ImageTag extends ArgAsContentTag {
 //
 class CTag extends \XBBC\LeafTag {
 	public function __construct() {
-		parent::__construct('<code>', '</code>', false, false);
+		parent::__construct('<code>', '</code>', false, '`');
 	}
 	
 	public function StripWhitespaces() { return true; }
@@ -148,6 +165,10 @@ class QuoteTag extends \XBBC\RootTag {
 		}
 		
 		return parent::Reduce();
+	}
+	
+	public function ReducePlaintext() {
+		return $this->GetAuthorString()."\n".\XBBC\TagTools::PrefixLines(parent::ReducePlaintext(), '| ');
 	}
 	
 	public function GetAuthorString() {
@@ -207,6 +228,10 @@ class TitleTag extends \XBBC\SimpleTag {
 		
 		$this->before = "<h{$this->level} id=\"$id\">";
 		return parent::Reduce();
+	}
+	
+	public function ReducePlaintext() {
+		return strtoupper(parent::ReducePlaintext());
 	}
 }
 
@@ -269,6 +294,10 @@ class ListItemTag extends \XBBC\SimpleTag {
 		
 		return parent::CanShift($tag);
 	}
+	
+	public function ReducePlaintext() {
+		return '* '.$this->Content();
+	}
 }
 
 //
@@ -282,5 +311,9 @@ class AnchorTag extends \XBBC\SingleTag {
 	protected function __create() {
 		parent::__create();
 		$this->html = '<div id="'.htmlspecialchars($this->arg).'"></div>';
+	}
+	
+	public function ReducePlaintext() {
+		return '#'.$this->arg;
 	}
 }

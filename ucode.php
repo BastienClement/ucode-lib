@@ -43,14 +43,14 @@ abstract class ArgAsContentTag extends \XBBC\TagDefinition {
 abstract class Lib {
 	public static function load(\XBBC\Parser $parser) {
 		// Very simple
-		$parser->DefineTag('b',          new \XBBC\SimpleTag('<strong>', '</strong>'));
-		$parser->DefineTag('i',          new \XBBC\SimpleTag('<em>', '</em>'));
-		$parser->DefineTag('u',          new \XBBC\SimpleTag('<span style="text-decoration: underline;">', '</span>'));
-		$parser->DefineTag('s',          new \XBBC\SimpleTag('<span style="text-decoration: line-through;">', '</span>'));
+		$parser->DefineTag('b',          new \XBBC\SimpleTag('<strong>', '</strong>', false, '*'));
+		$parser->DefineTag('i',          new \XBBC\SimpleTag('<em>', '</em>', false, '/'));
+		$parser->DefineTag('u',          new \XBBC\SimpleTag('<span style="text-decoration: underline;">', '</span>', false, '_'));
+		$parser->DefineTag('s',          new \XBBC\SimpleTag('<span style="text-decoration: line-through;">', '</span>', false, '-'));
 		$parser->DefineTag('sup',        new \XBBC\SimpleTag('<sup>', '</sup>'));
 		$parser->DefineTag('sub',        new \XBBC\SimpleTag('<sub>', '</sub>'));
-		$parser->DefineTag('ins',        new \XBBC\SimpleTag('<ins>', '</ins>'));
-		$parser->DefineTag('del',        new \XBBC\SimpleTag('<del>', '</del>'));
+		$parser->DefineTag('ins',        new \XBBC\SimpleTag('<ins>', '</ins>', false, '++'));
+		$parser->DefineTag('del',        new \XBBC\SimpleTag('<del>', '</del>', false, '--'));
 
 		// Basics
 		$parser->DefineTag('url',        new LinkTag());
@@ -58,7 +58,7 @@ abstract class Lib {
 		$parser->DefineTag('c',          new CTag());
 		$parser->DefineTag('code',       new \XBBC\LeafTag('<pre><code>', '</code></pre>', true, false));
 		
-		$parser->DefineTag('hr',         new \XBBC\SingleTag('<div class="hr"></div>', true));
+		$parser->DefineTag('hr',         new \XBBC\SingleTag('<div class="hr"></div>', true, str_repeat('-', 75)));
 		$parser->DefineTag('br',         new \XBBC\SingleTag('<br>', true));
 		$parser->DefineTag('center',     new \XBBC\SimpleTag('<center>', '</center>'));
 		$parser->DefineTag('color',      new ColorTag());

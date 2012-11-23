@@ -12,6 +12,10 @@ class SpoilerTag extends \XBBC\RootTag {
 		$this->after = '</div></div>';
 		$this->display = \XBBC\DISPLAY_BLOCK;
 	}
+	
+	public function ReducePlaintext() {
+		return "[SPOILER]\n".\XBBC\TagTools::PrefixLines(parent::ReducePlaintext(), "| ");
+	}
 }
 
 //
@@ -24,10 +28,14 @@ class TogglerTag extends \XBBC\RootTag {
 		$this->display = \XBBC\DISPLAY_BLOCK;
 	}
 	
+	protected function GetTogglerText() {
+		return $this->arg ? htmlspecialchars($this->arg) : 'Ouvrir / fermer';
+	}
+	
 	protected function __create() {
-		$text = $this->arg ? htmlspecialchars($this->arg) : 'Ouvrir / fermer';
+		$text = $this->GetTogglerText();
 		if(isset($this->xargs['icon']) && ($icon_url = WowheadTag::GetIconURL($this->xargs['icon']))) {
-			$icon = '<img src="'.$icon_url.'" class="wow-icon" alt="'.$this->arg.'" /"> ';
+			$icon = '<img src="'.$icon_url.'" class="wow-icon" alt="'.$this->xargs['icon'].'" /"> ';
 		} else {
 			$icon = '';
 		}
@@ -36,6 +44,10 @@ class TogglerTag extends \XBBC\RootTag {
 		
 		$classes = isset($this->xargs['open']) ? 'toggler toggled' : 'toggler';
 		$this->before = '<div class="'.$classes.'">'.$controller.'<div class="toggler-inner">';
+	}
+	
+	public function ReducePlaintext() {
+		return '[- '.$this->GetTogglerText()."]\n".\XBBC\TagTools::PrefixLines(parent::ReducePlaintext(), "| ");
 	}
 }
 
@@ -99,6 +111,10 @@ class TabsTag extends \XBBC\TagDefinition {
 		// Everything
 		return '<div class="tabs-wrapper">'.$tabs.$contents.'</div>';
 	}
+
+	public function ReducePlaintext() {
+		return \XBBC\TagTools::PrefixLines(trim(parent::ReducePlaintext()), "|");
+	}
 }
 
 //
@@ -133,4 +149,19 @@ class TabTag extends \XBBC\RootTag {
 	}
 	
 	public function Reduce() { return false; }
+	
+	public function ReducePlaintext() {
+		return "\n-[".$this->GetTitle()."]\n".\XBBC\TagTools::PrefixLines(parent::ReducePlaintext(), " ")."\n";
+	}
+}
+
+//
+// [video]
+//
+class VideoTag extends \XBBC\TagDefinition {
+	protected $display = \XBBC\DISPLAY_BLOCK;
+	
+	protected function __create() {
+		
+	}
 }
