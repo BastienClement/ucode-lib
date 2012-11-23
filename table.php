@@ -86,6 +86,9 @@ class TableDataTag extends \XBBC\RootTag {
 		if(isset($this->xargs['colspan']))
 			$attrs[] = 'colspan="'.((int) $this->xargs['colspan']).'"';
 		
+		if(isset($this->xargs['width']))
+			$attrs[] = 'style="width:'.((int) $this->xargs['width']).'%;"';
+		
 		$attrs = empty($attrs) ? '' : ' '.implode(' ', $attrs);
 		return (($this->table_header) ? '<th' : '<td').$attrs.'>';
 	}
