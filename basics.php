@@ -295,6 +295,10 @@ class ListItemTag extends \XBBC\SimpleTag {
 		return parent::CanShift($tag);
 	}
 	
+	public function StripWhitespaces() {
+		return false;
+	}
+	
 	public function ReducePlaintext() {
 		return '* '.$this->Content();
 	}
