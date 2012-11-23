@@ -59,7 +59,7 @@ abstract class Lib {
 		$parser->DefineTag('code',       new \XBBC\LeafTag('<pre><code>', '</code></pre>', true, false));
 		
 		$parser->DefineTag('hr',         new \XBBC\SingleTag('<div class="hr"></div>', true, str_repeat('-', 75)));
-		$parser->DefineTag('br',         new \XBBC\SingleTag('<br>', true));
+		$parser->DefineTag('br',         new \XBBC\SingleTag('<br>'));
 		$parser->DefineTag('center',     new \XBBC\SimpleTag('<center>', '</center>'));
 		$parser->DefineTag('color',      new ColorTag());
 		$parser->DefineTag('a',          new AnchorTag());
