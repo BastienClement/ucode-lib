@@ -55,6 +55,7 @@ abstract class Lib {
 		// Basics
 		$parser->DefineTag('url',        new LinkTag());
 		$parser->DefineTag('img',        new ImageTag());
+		$parser->DefineTag('latex',      new LatexTag());
 		$parser->DefineTag('c',          new CTag());
 		$parser->DefineTag('code',       new \XBBC\LeafTag('<pre><code>', '</code></pre>', true, false));
 		

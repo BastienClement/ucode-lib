@@ -121,6 +121,52 @@ class CTag extends \XBBC\LeafTag {
 }
 
 //
+// [latex]
+//
+class LatexTag extends \XBBC\LeafTag {
+	public function __construct() {
+		parent::__construct(null, null, false);
+	}
+	
+	public function Reduce() {
+		$latex = urlencode($this->Content());
+		
+		if(!isset($this->xargs['size'])) {
+			$this->xargs['size'] = 0;
+		}
+		
+		switch($this->xargs['size']) {
+			case '5': $size = '&s=4'; break;
+			case '4': $size = '&s=3'; break;
+			case '3': $size = '&s=2'; break;
+			case '2': $size = '&s=1'; break;
+			default:  $size = ''; break;
+		}
+		
+		if(!isset($this->xargs['bg'])) {
+			$this->xargs['bg'] = 0;
+		}
+		
+		switch($this->xargs['bg']) {
+			case '2':
+				$background = '111111';
+				break;
+				
+			case '1':
+				$background = '161616';
+				break;
+				
+			default:
+				$background = '1a1a1a';
+				break;
+		}
+		
+		$url = "http://s0.wp.com/latex.php?latex=$latex&bg=$background&fg=bbbbbb$size";
+		return '<img src="'.$url.'" alt="" class="latex" />';
+	}
+}
+
+//
 // [color]
 //
 class ColorTag extends \XBBC\SimpleTag {
