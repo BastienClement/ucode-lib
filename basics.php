@@ -226,7 +226,9 @@ class TitleTag extends \XBBC\SimpleTag {
 			self::$IDS_CACHE[$id] = 1;
 		}
 		
-		$this->before = "<h{$this->level} id=\"$id\">";
+		$notoc = (isset($this->xargs['notoc'])) ? ' class="notoc"' : '';
+		
+		$this->before = "<h{$this->level} id=\"$id\"$notoc>";
 		return parent::Reduce();
 	}
 	
