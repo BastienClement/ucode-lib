@@ -91,6 +91,9 @@ class ImageTag extends ArgAsContentTag {
 			$styles[] = 'vertical-align:'.$this->xargs['valign'];
 		}
 		
+		if(isset($this->xargs['noshadow']))
+			$styles[] = 'box-shadow:none;';
+		
 		$styles = !empty($styles) ? 'style="'.implode(';', $styles).'" ' : '';
 		
 		// Final tag
