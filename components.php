@@ -42,6 +42,45 @@ class TogglerTag extends \XBBC\RootTag {
 		
 		$controller = '<a href="#" onclick="ucode.toggler(this); return false;" class="toggler-link">'.$icon.$text.'</a>';
 		
+		if(isset($this->xargs['ej'])) {
+			$ejFlags = $this->xargs['ej'];
+		
+			for($i = 0, $len = strlen($ejFlags); $i < $len; $i++) {
+				switch($ejFlags[$i]) {
+					case "D":
+						$controller .= ' <img src="http://wow.zamimg.com/images/icons/ej-deadly.png" class="ej-icon" alt="" /">';
+						break;
+					case "I":
+						$controller .= ' <img src="http://wow.zamimg.com/images/icons/ej-important.png" class="ej-icon" alt="" /">';
+						break;
+					case "H":
+						$controller .= ' <img src="http://wow.zamimg.com/images/icons/ej-heroic.png" class="ej-icon" alt="" /">';
+						break;
+					case "m":
+						$controller .= ' <img src="http://wow.zamimg.com/images/icons/ej-magic.png" class="ej-icon" alt="" /">';
+						break;
+					case "p":
+						$controller .= ' <img src="http://wow.zamimg.com/images/icons/ej-poison.png" class="ej-icon" alt="" /">';
+						break;
+					case "o":
+						$controller .= ' <img src="http://wow.zamimg.com/images/icons/ej-disease.png" class="ej-icon" alt="" /">';
+						break;
+					case "t":
+						$controller .= ' <img src="http://wow.zamimg.com/images/icons/ej-tank.png" class="ej-icon" alt="" /">';
+						break;
+					case "h":
+						$controller .= ' <img src="http://wow.zamimg.com/images/icons/ej-healer.png" class="ej-icon" alt="" /">';
+						break;
+					case "d":
+						$controller .= ' <img src="http://wow.zamimg.com/images/icons/ej-dps.png" class="ej-icon" alt="" /">';
+						break;
+					case "k":
+						$controller .= ' <img src="http://wow.zamimg.com/images/icons/ej-interrupt.png" class="ej-icon" alt="" /">';
+						break;
+				}
+			}
+		}
+		
 		$classes = isset($this->xargs['open']) ? 'toggler toggled' : 'toggler';
 		$this->before = '<div class="'.$classes.'">'.$controller.'<div class="toggler-inner">';
 	}
